@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 
 //Debits are withdrawls
 //Credits are payments into the account
-public record Account(String name, long ID, ArrayDeque<BigDecimal> credits, ArrayDeque<BigDecimal> debits, boolean negBalanceAllowed) {
+public record Account(String name, long ID, ArrayDeque<BigDecimal> credits, ArrayDeque<BigDecimal> debits, boolean negBalanceAllowed, String passHash) {
 
     private boolean debitNotOverdrawCheck(BigDecimal amount){
         BigDecimal preBalance = this.balance();
@@ -90,11 +90,11 @@ public record Account(String name, long ID, ArrayDeque<BigDecimal> credits, Arra
     }
 
     public Account clone(){
-        return new Account(this.name, this.ID, credits.clone(), debits.clone(), this.negBalanceAllowed);
+        return new Account(this.name, this.ID, credits.clone(), debits.clone(), this.negBalanceAllowed, this.passHash);
     }
 
 
-    public static Account createAccount(long ID, String name, boolean overdrawAllowed) {
-        return new Account(name, ID, new ArrayDeque<BigDecimal>(), new ArrayDeque<BigDecimal>(), overdrawAllowed);
+    public static Account createAccount(long ID, String name, boolean overdrawAllowed, String passHash) {
+        return new Account(name, ID, new ArrayDeque<BigDecimal>(), new ArrayDeque<BigDecimal>(), overdrawAllowed, passHash);
     }
 }

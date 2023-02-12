@@ -3,6 +3,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class AccountList {
     private HashMap<Long,Account> accounts = new HashMap<>();
+    private HashMap<String,Long> nameToID = new HashMap<>();
+
 
     private long generateID(){
         long potential = ThreadLocalRandom.current().nextLong(100000,Long.MAX_VALUE);
@@ -14,13 +16,21 @@ public class AccountList {
         return potential;
     }
 
-    public void addAccount(String name, boolean overdrawAllowed) {
+    public void addAccount(String name, boolean overdrawAllowed, String passHash) {
         Long key = generateID();
-        accounts.put(key,Account.createAccount(key,name,overdrawAllowed));
+        accounts.put(key,Account.createAccount(key,name,overdrawAllowed,passHash));
     }
 
     public Account get(Long key){
         return accounts.get(key);
+    }
+
+    private Long getID(String name){
+        return nameToID.get(name);
+    }
+
+    public Account get(String name){
+        return accounts.get(getID(name));
     }
 
     public void replace(Long key, Account newAccount){
